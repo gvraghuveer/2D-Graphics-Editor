@@ -3,18 +3,44 @@
 #define ROWS 20
 #define COLS 50
 
+
+typedef struct{
+    int row;
+    int col;
+    int width;
+    int height;
+} Rectangle;
+
+typedef struct{
+    int row1;
+    int col1;
+    int row2;
+    int col2;
+} Line;
+
+Rectangle rectangles[100];
+Line lines[100];
+
+int rectangleCount = 0;
+int lineCount = 0;
 char canvas[ROWS][COLS];
 
 void initCanvas();
 void displayCanvas();
+void addRectangle(int row, int col, int width, int height);
+void addLine(int row1, int col1, int row2, int col2);
 void drawRectangle(int row, int col, int width, int height);
 void drawLine(int row1, int col1, int row2, int col2);
+void renderCanvas();
 
 int main()
 {
     initCanvas();
-    drawRectangle(2, 5, 10, 4);
-    drawLine(8, 30, 15, 30);
+
+    addRectangle(2, 5, 10, 4);
+    addLine(8, 30, 15, 30);
+
+    renderCanvas();
     displayCanvas();
 
     return 0;
@@ -29,6 +55,24 @@ void initCanvas()
             canvas[i][j] = '_';
         }
     }
+}
+
+void addRectangle(int row, int col, int width, int height){
+    rectangles[rectangleCount].row = row;
+    rectangles[rectangleCount].col = col;
+    rectangles[rectangleCount].width = width;
+    rectangles[rectangleCount].height = height;
+
+    rectangleCount++;
+}
+
+void addLine(int row1, int col1, int row2, int col2){
+    lines[lineCount].row1 = row1;
+    lines[lineCount].col1 = col1;
+    lines[lineCount].row2 = row2;
+    lines[lineCount].col2 = col2;
+
+    lineCount++;
 }
 
 void drawRectangle(int row, int col, int width, int height)
@@ -100,5 +144,17 @@ void displayCanvas()
             printf("%c ", canvas[i][j]);
         }
         printf("\n");
+    }
+}
+
+void renderCanvas(){
+    initCanvas();
+
+    for(int i=0; i<rectangleCount; i++){
+        drawRectangle(rectangles[i].row, rectangles[i].col, rectangles[i].width, rectangles[i].height);
+    }
+
+    for(int i=0; i<lineCount; i++){
+        drawLine(lines[i].row1, lines[i].col1, lines[i].row2, lines[i].col2);
     }
 }
