@@ -53,22 +53,22 @@ char canvas[ROWS][COLS];
 
 void initCanvas();
 void displayCanvas();
-//Add
+// Add
 void addRectangle(int row, int col, int width, int height);
 void addLine(int row1, int col1, int row2, int col2);
 void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3);
 void addCircle(int centerRow, int centerCol, int radius);
-//Draw
+// Draw
 void drawRectangle(int row, int col, int width, int height);
 void drawLine(int row1, int col1, int row2, int col2);
 void drawTriangle(int row1, int col1, int row2, int col2, int row3, int col3);
 void drawCircle(int centerRow, int centerCol, int radius);
-//Delete
+// Delete
 void deleteRectangle(int index);
 void deleteLine(int index);
 void deleteTriangle(int index);
 void deleteCircle(int index);
-//Render
+// Render
 void renderCanvas();
 
 int main()
@@ -81,6 +81,9 @@ int main()
     addCircle(15, 40, 5);
 
     deleteRectangle(0);
+    deleteCircle(0);
+    deleteLine(0);
+    deleteTriangle(0);
 
     renderCanvas();
     displayCanvas();
@@ -291,17 +294,66 @@ void renderCanvas()
     }
 }
 
-void deleteRectangle(int index){
-    if(index < 0 || index >= rectangleCount)
+void deleteRectangle(int index)
+{
+    if (index < 0 || index >= rectangleCount)
     {
         printf("Invalid Rectangle Index\n");
         return;
     }
 
-    for(int i = index; i < rectangleCount - 1; i++)
+    for (int i = index; i < rectangleCount - 1; i++)
     {
         rectangles[i] = rectangles[i + 1];
     }
 
     rectangleCount--;
+}
+
+void deleteLine(int index)
+{
+    if (index < 0 || index >= lineCount)
+    {
+        printf("Invalid Line Index\n");
+        return;
+    }
+
+    for (int i = index; i < lineCount - 1; i++)
+    {
+        lines[i] = lines[i + 1];
+    }
+
+    lineCount--;
+}
+
+void deleteCircle(int index)
+{
+    if (index < 0 || index >= circleCount)
+    {
+        printf("Invalid Circle Index\n");
+        return;
+    }
+
+    for (int i = index; i < circleCount - 1; i++)
+    {
+        circles[i] = circles[i + 1];
+    }
+
+    circleCount--;
+}
+
+void deleteTriangle(int index)
+{
+    if (index < 0 || index >= triangleCount)
+    {
+        printf("Invalid Triangle Index\n");
+        return;
+    }
+
+    for (int i = index; i < triangleCount - 1; i++)
+    {
+        triangles[i] = triangles[i + 1];
+    }
+
+    triangleCount--;
 }
