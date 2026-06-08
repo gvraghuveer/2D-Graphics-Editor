@@ -32,24 +32,43 @@ typedef struct
     int col3;
 } Triangle;
 
+typedef struct
+{
+    int centerRow;
+    int centerCol;
+    int radius;
+} Circle;
+
 Rectangle rectangles[100];
 Line lines[100];
 Triangle triangles[100];
+Circle circles[100];
 
 int rectangleCount = 0;
 int lineCount = 0;
 int triangleCount = 0;
+int circleCount = 0;
 
 char canvas[ROWS][COLS];
 
 void initCanvas();
 void displayCanvas();
+//Add
 void addRectangle(int row, int col, int width, int height);
 void addLine(int row1, int col1, int row2, int col2);
 void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3);
-void drawTriangle(int row1, int col1, int row2, int col2, int row3, int col3);
+void addCircle(int centerRow, int centerCol, int radius);
+//Draw
 void drawRectangle(int row, int col, int width, int height);
 void drawLine(int row1, int col1, int row2, int col2);
+void drawTriangle(int row1, int col1, int row2, int col2, int row3, int col3);
+void drawCircle(int centerRow, int centerCol, int radius);
+//Delete
+void deleteRectangle(int index);
+void deleteLine(int index);
+void deleteTriangle(int index);
+void deleteCircle(int index);
+//Render
 void renderCanvas();
 
 int main()
@@ -59,6 +78,9 @@ int main()
     addRectangle(2, 5, 10, 4);
     addLine(8, 30, 15, 30);
     addTriangle(10, 5, 15, 5, 15, 15);
+    addCircle(15, 40, 5);
+
+    deleteRectangle(0);
 
     renderCanvas();
     displayCanvas();
@@ -109,6 +131,15 @@ void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3)
     triangles[triangleCount].col3 = col3;
 
     triangleCount++;
+}
+
+void addCircle(int centerRow, int centerCol, int radius)
+{
+    circles[circleCount].centerRow = centerRow;
+    circles[circleCount].centerCol = centerCol;
+    circles[circleCount].radius = radius;
+
+    circleCount++;
 }
 
 void drawRectangle(int row, int col, int width, int height)
@@ -203,6 +234,26 @@ void drawTriangle(int row1, int col1, int row2, int col2, int row3, int col3)
     drawLine(row3, col3, row1, col1);
 }
 
+void drawCircle(int centerRow, int centerCol, int radius)
+{
+    for (int row = 0; row < ROWS; row++)
+    {
+        for (int col = 0; col < COLS; col++)
+        {
+            int dx = col - centerCol;
+            int dy = row - centerRow;
+
+            int distanceSquared = dx * dx + dy * dy;
+            int radiusSquared = radius * radius;
+
+            if (abs(distanceSquared - radiusSquared) <= radius)
+            {
+                canvas[row][col] = '*';
+            }
+        }
+    }
+}
+
 void displayCanvas()
 {
     for (int i = 0; i < ROWS; i++)
@@ -233,4 +284,24 @@ void renderCanvas()
     {
         drawTriangle(triangles[i].row1, triangles[i].col1, triangles[i].row2, triangles[i].col2, triangles[i].row3, triangles[i].col3);
     }
+
+    for (int i = 0; i < circleCount; i++)
+    {
+        drawCircle(circles[i].centerRow, circles[i].centerCol, circles[i].radius);
+    }
+}
+
+void deleteRectangle(int index){
+    if(index < 0 || index >= rectangleCount)
+    {
+        printf("Invalid Rectangle Index\n");
+        return;
+    }
+
+    for(int i = index; i < rectangleCount - 1; i++)
+    {
+        rectangles[i] = rectangles[i + 1];
+    }
+
+    rectangleCount--;
 }
