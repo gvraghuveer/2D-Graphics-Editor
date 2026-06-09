@@ -68,31 +68,36 @@ void deleteRectangle(int index);
 void deleteLine(int index);
 void deleteTriangle(int index);
 void deleteCircle(int index);
+// Modify
+void modifyRectangle(int index, int row, int col, int width, int height);
+void modifyLine(int index, int row1, int col1, int row2, int col2);
+void modifyTriangle(int index, int row1, int col1, int row2, int col2, int row3, int col3);
+void modifyCircle(int index, int centerRow, int centerCol, int radius);
 // Render
 void renderCanvas();
 
-int main()
-{
+int main(){
     initCanvas();
-
+    // Add
     addRectangle(2, 5, 10, 4);
-    addLine(8, 30, 15, 30);
-    addTriangle(10, 5, 15, 5, 15, 15);
-    addCircle(15, 40, 5);
-
-    deleteRectangle(0);
-    deleteCircle(0);
-    deleteLine(0);
-    deleteTriangle(0);
-
+    // addLine(8, 30, 15, 30);
+    // addTriangle(10, 5, 15, 5, 15, 15);
+    // addCircle(15, 40, 5);
+    // Delete
+    // deleteRectangle(0);
+    // deleteCircle(0);
+    // deleteLine(0);
+    // deleteTriangle(0);
+    // Modify
+    modifyRectangle(0, 8, 20, 12, 6);
+    //Others
     renderCanvas();
     displayCanvas();
 
     return 0;
 }
 
-void initCanvas()
-{
+void initCanvas(){
     for (int i = 0; i < ROWS; i++)
     {
         for (int j = 0; j < COLS; j++)
@@ -102,8 +107,7 @@ void initCanvas()
     }
 }
 
-void addRectangle(int row, int col, int width, int height)
-{
+void addRectangle(int row, int col, int width, int height){
     rectangles[rectangleCount].row = row;
     rectangles[rectangleCount].col = col;
     rectangles[rectangleCount].width = width;
@@ -112,8 +116,7 @@ void addRectangle(int row, int col, int width, int height)
     rectangleCount++;
 }
 
-void addLine(int row1, int col1, int row2, int col2)
-{
+void addLine(int row1, int col1, int row2, int col2){
     lines[lineCount].row1 = row1;
     lines[lineCount].col1 = col1;
     lines[lineCount].row2 = row2;
@@ -122,8 +125,7 @@ void addLine(int row1, int col1, int row2, int col2)
     lineCount++;
 }
 
-void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3)
-{
+void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3){
     triangles[triangleCount].row1 = row1;
     triangles[triangleCount].col1 = col1;
 
@@ -136,8 +138,7 @@ void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3)
     triangleCount++;
 }
 
-void addCircle(int centerRow, int centerCol, int radius)
-{
+void addCircle(int centerRow, int centerCol, int radius){
     circles[circleCount].centerRow = centerRow;
     circles[circleCount].centerCol = centerCol;
     circles[circleCount].radius = radius;
@@ -145,8 +146,7 @@ void addCircle(int centerRow, int centerCol, int radius)
     circleCount++;
 }
 
-void drawRectangle(int row, int col, int width, int height)
-{
+void drawRectangle(int row, int col, int width, int height){
     int i, j;
 
     // Top
@@ -174,8 +174,7 @@ void drawRectangle(int row, int col, int width, int height)
     }
 }
 
-void drawLine(int row1, int col1, int row2, int col2)
-{
+void drawLine(int row1, int col1, int row2, int col2){
     int i;
     if (row1 == row2)
     {
@@ -230,15 +229,13 @@ void drawLine(int row1, int col1, int row2, int col2)
     }
 }
 
-void drawTriangle(int row1, int col1, int row2, int col2, int row3, int col3)
-{
+void drawTriangle(int row1, int col1, int row2, int col2, int row3, int col3){
     drawLine(row1, col1, row2, col2);
     drawLine(row2, col2, row3, col3);
     drawLine(row3, col3, row1, col1);
 }
 
-void drawCircle(int centerRow, int centerCol, int radius)
-{
+void drawCircle(int centerRow, int centerCol, int radius){
     for (int row = 0; row < ROWS; row++)
     {
         for (int col = 0; col < COLS; col++)
@@ -257,8 +254,7 @@ void drawCircle(int centerRow, int centerCol, int radius)
     }
 }
 
-void displayCanvas()
-{
+void displayCanvas(){
     for (int i = 0; i < ROWS; i++)
     {
         for (int j = 0; j < COLS; j++)
@@ -269,8 +265,7 @@ void displayCanvas()
     }
 }
 
-void renderCanvas()
-{
+void renderCanvas(){
     initCanvas();
 
     for (int i = 0; i < rectangleCount; i++)
@@ -294,8 +289,7 @@ void renderCanvas()
     }
 }
 
-void deleteRectangle(int index)
-{
+void deleteRectangle(int index){
     if (index < 0 || index >= rectangleCount)
     {
         printf("Invalid Rectangle Index\n");
@@ -310,8 +304,7 @@ void deleteRectangle(int index)
     rectangleCount--;
 }
 
-void deleteLine(int index)
-{
+void deleteLine(int index){
     if (index < 0 || index >= lineCount)
     {
         printf("Invalid Line Index\n");
@@ -326,8 +319,7 @@ void deleteLine(int index)
     lineCount--;
 }
 
-void deleteCircle(int index)
-{
+void deleteCircle(int index){
     if (index < 0 || index >= circleCount)
     {
         printf("Invalid Circle Index\n");
@@ -342,8 +334,7 @@ void deleteCircle(int index)
     circleCount--;
 }
 
-void deleteTriangle(int index)
-{
+void deleteTriangle(int index){
     if (index < 0 || index >= triangleCount)
     {
         printf("Invalid Triangle Index\n");
@@ -356,4 +347,63 @@ void deleteTriangle(int index)
     }
 
     triangleCount--;
+}
+
+void modifyRectangle(int index, int row, int col, int width, int height)
+{
+    if(index < 0 || index >= rectangleCount)
+    {
+        printf("Invalid Rectangle Index\n");
+        return;
+    }
+
+    rectangles[index].row = row;
+    rectangles[index].col = col;
+    rectangles[index].width = width;
+    rectangles[index].height = height;
+}
+
+void modifyLine(int index, int row1, int col1, int row2, int col2)
+{
+    if(index < 0 || index >= lineCount)
+    {
+        printf("Invalid Line Index\n");
+        return;
+    }
+
+    lines[index].row1 = row1;
+    lines[index].col1 = col1;
+    lines[index].row2 = row2;
+    lines[index].col2 = col2;
+}
+
+void modifyTriangle(int index, int row1, int col1, int row2, int col2, int row3, int col3)
+{
+    if(index < 0 || index >= triangleCount)
+    {
+        printf("Invalid Triangle Index\n");
+        return;
+    }
+
+    triangles[index].row1 = row1;
+    triangles[index].col1 = col1;
+
+    triangles[index].row2 = row2;
+    triangles[index].col2 = col2;
+
+    triangles[index].row3 = row3;
+    triangles[index].col3 = col3;
+}
+
+void modifyCircle(int index, int centerRow, int centerCol, int radius)
+{
+    if(index < 0 || index >= circleCount)
+    {
+        printf("Invalid Circle Index\n");
+        return;
+    }
+
+    circles[index].centerRow = centerRow;
+    circles[index].centerCol = centerCol;
+    circles[index].radius = radius;
 }
