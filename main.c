@@ -3,6 +3,13 @@
 
 #define ROWS 20
 #define COLS 50
+#define CLEAR_BUFFER()                              \
+    do                                              \
+    {                                               \
+        int c;                                      \
+        while ((c = getchar()) != '\n' && c != EOF) \
+            ;                                       \
+    } while (0)
 
 typedef struct
 {
@@ -51,6 +58,15 @@ int circleCount = 0;
 
 char canvas[ROWS][COLS];
 
+void setCanvasPixel(int row, int col)
+{
+    if (row >= 0 && row < ROWS && col >= 0 && col < COLS)
+    {
+        canvas[row][col] = '*';
+    }
+}
+
+// Initiate
 void initCanvas();
 void displayCanvas();
 // Add
@@ -76,28 +92,378 @@ void modifyCircle(int index, int centerRow, int centerCol, int radius);
 // Render
 void renderCanvas();
 
-int main(){
-    initCanvas();
-    // Add
-    addRectangle(2, 5, 10, 4);
-    // addLine(8, 30, 15, 30);
-    // addTriangle(10, 5, 15, 5, 15, 15);
-    // addCircle(15, 40, 5);
-    // Delete
-    // deleteRectangle(0);
-    // deleteCircle(0);
-    // deleteLine(0);
-    // deleteTriangle(0);
-    // Modify
-    modifyRectangle(0, 8, 20, 12, 6);
-    //Others
-    renderCanvas();
-    displayCanvas();
+int main()
+{
+    int choice;
+    int shapeChoice;
 
-    return 0;
+    while (1)
+    {
+        printf("\n===== 2D Graphics Editor =====\n");
+        printf("1. Add Object\n");
+        printf("2. Delete Object\n");
+        printf("3. Modify Object\n");
+        printf("4. Display Canvas\n");
+        printf("5. Exit\n");
+
+        printf("Enter Choice: ");
+        scanf("%d", &choice);
+        CLEAR_BUFFER();
+
+        switch (choice)
+        {
+        case 1: // Add
+        {
+            printf("\n===== Add Object =====\n");
+            printf("1. Rectangle\n");
+            printf("2. Line\n");
+            printf("3. Triangle\n");
+            printf("4. Circle\n");
+
+            printf("Enter Choice: ");
+            scanf("%d", &shapeChoice);
+            CLEAR_BUFFER();
+
+            switch (shapeChoice)
+            {
+            case 1:
+            {
+                int row, col, width, height;
+
+                printf("Row: ");
+                scanf("%d", &row);
+                CLEAR_BUFFER();
+
+                printf("Col: ");
+                scanf("%d", &col);
+                CLEAR_BUFFER();
+
+                printf("Width: ");
+                scanf("%d", &width);
+                CLEAR_BUFFER();
+
+                printf("Height: ");
+                scanf("%d", &height);
+                CLEAR_BUFFER();
+
+                addRectangle(row, col, width, height);
+                break;
+            }
+
+            case 2:
+            {
+                int row1, col1, row2, col2;
+
+                printf("Row1: ");
+                scanf("%d", &row1);
+                CLEAR_BUFFER();
+
+                printf("Col1: ");
+                scanf("%d", &col1);
+                CLEAR_BUFFER();
+
+                printf("Row2: ");
+                scanf("%d", &row2);
+                CLEAR_BUFFER();
+
+                printf("Col2: ");
+                scanf("%d", &col2);
+                CLEAR_BUFFER();
+
+                addLine(row1, col1, row2, col2);
+                break;
+            }
+
+            case 3:
+            {
+                int row1, col1;
+                int row2, col2;
+                int row3, col3;
+
+                printf("Row1: ");
+                scanf("%d", &row1);
+                CLEAR_BUFFER();
+
+                printf("Col1: ");
+                scanf("%d", &col1);
+                CLEAR_BUFFER();
+
+                printf("Row2: ");
+                scanf("%d", &row2);
+                CLEAR_BUFFER();
+
+                printf("Col2: ");
+                scanf("%d", &col2);
+                CLEAR_BUFFER();
+
+                printf("Row3: ");
+                scanf("%d", &row3);
+                CLEAR_BUFFER();
+
+                printf("Col3: ");
+                scanf("%d", &col3);
+                CLEAR_BUFFER();
+
+                addTriangle(
+                    row1, col1,
+                    row2, col2,
+                    row3, col3);
+
+                break;
+            }
+
+            case 4:
+            {
+                int centerRow;
+                int centerCol;
+                int radius;
+
+                printf("Center Row: ");
+                scanf("%d", &centerRow);
+                CLEAR_BUFFER();
+
+                printf("Center Col: ");
+                scanf("%d", &centerCol);
+                CLEAR_BUFFER();
+
+                printf("Radius: ");
+                scanf("%d", &radius);
+                CLEAR_BUFFER();
+
+                addCircle(
+                    centerRow,
+                    centerCol,
+                    radius);
+
+                break;
+            }
+            }
+
+            break;
+        }
+
+        case 2: // Delete
+        {
+            printf("\n===== Delete Object =====\n");
+            printf("1. Rectangle\n");
+            printf("2. Line\n");
+            printf("3. Triangle\n");
+            printf("4. Circle\n");
+
+            printf("Enter Choice: ");
+            scanf("%d", &shapeChoice);
+            CLEAR_BUFFER();
+
+            int index;
+
+            printf("Index: ");
+            scanf("%d", &index);
+            CLEAR_BUFFER();
+
+            switch (shapeChoice)
+            {
+            case 1:
+                deleteRectangle(index);
+                break;
+
+            case 2:
+                deleteLine(index);
+                break;
+
+            case 3:
+                deleteTriangle(index);
+                break;
+
+            case 4:
+                deleteCircle(index);
+                break;
+            }
+
+            break;
+        }
+
+        case 3: // Modify
+        {
+            printf("\n===== Modify Object =====\n");
+            printf("1. Rectangle\n");
+            printf("2. Line\n");
+            printf("3. Triangle\n");
+            printf("4. Circle\n");
+
+            printf("Enter Choice: ");
+            scanf("%d", &shapeChoice);
+            CLEAR_BUFFER();
+
+            switch (shapeChoice)
+            {
+            case 1:
+            {
+                int index;
+                int row, col, width, height;
+
+                printf("Rectangle Index: ");
+                scanf("%d", &index);
+                CLEAR_BUFFER();
+
+                printf("Row: ");
+                scanf("%d", &row);
+                CLEAR_BUFFER();
+
+                printf("Col: ");
+                scanf("%d", &col);
+                CLEAR_BUFFER();
+
+                printf("Width: ");
+                scanf("%d", &width);
+                CLEAR_BUFFER();
+
+                printf("Height: ");
+                scanf("%d", &height);
+                CLEAR_BUFFER();
+
+                modifyRectangle(
+                    index,
+                    row,
+                    col,
+                    width,
+                    height);
+
+                break;
+            }
+
+            case 2:
+            {
+                int index;
+                int row1, col1, row2, col2;
+
+                printf("Line Index: ");
+                scanf("%d", &index);
+                CLEAR_BUFFER();
+
+                printf("Row1: ");
+                scanf("%d", &row1);
+                CLEAR_BUFFER();
+
+                printf("Col1: ");
+                scanf("%d", &col1);
+                CLEAR_BUFFER();
+
+                printf("Row2: ");
+                scanf("%d", &row2);
+                CLEAR_BUFFER();
+
+                printf("Col2: ");
+                scanf("%d", &col2);
+                CLEAR_BUFFER();
+
+                modifyLine(index, row1, col1, row2, col2);
+
+                break;
+            }
+
+            case 3:
+            {
+                int index;
+                int row1, col1, row2, col2, row3, col3;
+
+                printf("Triangle Index: ");
+                scanf("%d", &index);
+                CLEAR_BUFFER();
+
+                printf("Row1: ");
+                scanf("%d", &row1);
+                CLEAR_BUFFER();
+
+                printf("Col1: ");
+                scanf("%d", &col1);
+                CLEAR_BUFFER();
+
+                printf("Row2: ");
+                scanf("%d", &row2);
+                CLEAR_BUFFER();
+
+                printf("Col2: ");
+                scanf("%d", &col2);
+                CLEAR_BUFFER();
+
+                printf("Row3: ");
+                scanf("%d", &row3);
+                CLEAR_BUFFER();
+
+                printf("Col3: ");
+                scanf("%d", &col3);
+                CLEAR_BUFFER();
+
+                modifyTriangle(
+                    index,
+                    row1, col1,
+                    row2, col2,
+                    row3, col3);
+
+                break;
+            }
+
+            case 4:
+            {
+                int index;
+                int centerRow;
+                int centerCol;
+                int radius;
+
+                printf("Circle Index: ");
+                scanf("%d", &index);
+                CLEAR_BUFFER();
+
+                printf("Center Row: ");
+                scanf("%d", &centerRow);
+                CLEAR_BUFFER();
+
+                printf("Center Col: ");
+                scanf("%d", &centerCol);
+                CLEAR_BUFFER();
+
+                printf("Radius: ");
+                scanf("%d", &radius);
+                CLEAR_BUFFER();
+
+                modifyCircle(
+                    index,
+                    centerRow,
+                    centerCol,
+                    radius);
+
+                break;
+            }
+            }
+
+            break;
+        }
+
+        case 4:
+        {
+            renderCanvas();
+            displayCanvas();
+            printf("\n\nPress Enter to continue...");
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF)
+                ;
+            break;
+        }
+
+        case 5:
+        {
+            printf("Exiting...\n");
+            return 0;
+        }
+
+        default:
+            printf("Invalid Choice!\n");
+        }
+    }
 }
 
-void initCanvas(){
+void initCanvas()
+{
     for (int i = 0; i < ROWS; i++)
     {
         for (int j = 0; j < COLS; j++)
@@ -107,7 +473,8 @@ void initCanvas(){
     }
 }
 
-void addRectangle(int row, int col, int width, int height){
+void addRectangle(int row, int col, int width, int height)
+{
     rectangles[rectangleCount].row = row;
     rectangles[rectangleCount].col = col;
     rectangles[rectangleCount].width = width;
@@ -116,7 +483,8 @@ void addRectangle(int row, int col, int width, int height){
     rectangleCount++;
 }
 
-void addLine(int row1, int col1, int row2, int col2){
+void addLine(int row1, int col1, int row2, int col2)
+{
     lines[lineCount].row1 = row1;
     lines[lineCount].col1 = col1;
     lines[lineCount].row2 = row2;
@@ -125,7 +493,8 @@ void addLine(int row1, int col1, int row2, int col2){
     lineCount++;
 }
 
-void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3){
+void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3)
+{
     triangles[triangleCount].row1 = row1;
     triangles[triangleCount].col1 = col1;
 
@@ -138,7 +507,8 @@ void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3){
     triangleCount++;
 }
 
-void addCircle(int centerRow, int centerCol, int radius){
+void addCircle(int centerRow, int centerCol, int radius)
+{
     circles[circleCount].centerRow = centerRow;
     circles[circleCount].centerCol = centerCol;
     circles[circleCount].radius = radius;
@@ -146,35 +516,42 @@ void addCircle(int centerRow, int centerCol, int radius){
     circleCount++;
 }
 
-void drawRectangle(int row, int col, int width, int height){
+void drawRectangle(int row, int col, int width, int height)
+{
     int i, j;
+
+    if (width <= 0 || height <= 0)
+    {
+        return;
+    }
 
     // Top
     for (j = col; j < col + width; j++)
     {
-        canvas[row][j] = '*';
+        setCanvasPixel(row, j);
     }
 
     // Bottom
     for (j = col; j < col + width; j++)
     {
-        canvas[row + height - 1][j] = '*';
+        setCanvasPixel(row + height - 1, j);
     }
 
     // Left
     for (i = row; i < row + height; i++)
     {
-        canvas[i][col] = '*';
+        setCanvasPixel(i, col);
     }
 
     // Right
     for (i = row; i < row + height; i++)
     {
-        canvas[i][col + width - 1] = '*';
+        setCanvasPixel(i, col + width - 1);
     }
 }
 
-void drawLine(int row1, int col1, int row2, int col2){
+void drawLine(int row1, int col1, int row2, int col2)
+{
     int i;
     if (row1 == row2)
     {
@@ -187,7 +564,7 @@ void drawLine(int row1, int col1, int row2, int col2){
 
         for (i = col1; i <= col2; i++)
         {
-            canvas[row1][i] = '*';
+            setCanvasPixel(row1, i);
         }
     }
 
@@ -202,7 +579,7 @@ void drawLine(int row1, int col1, int row2, int col2){
 
         for (i = row1; i <= row2; i++)
         {
-            canvas[i][col1] = '*';
+            setCanvasPixel(i, col1);
         }
     }
 
@@ -221,7 +598,7 @@ void drawLine(int row1, int col1, int row2, int col2){
 
         for (int i = 0; i <= steps; i++)
         {
-            canvas[(int)(r + 0.5)][(int)(c + 0.5)] = '*';
+            setCanvasPixel((int)(r + 0.5), (int)(c + 0.5));
 
             r += rowInc;
             c += colInc;
@@ -229,13 +606,15 @@ void drawLine(int row1, int col1, int row2, int col2){
     }
 }
 
-void drawTriangle(int row1, int col1, int row2, int col2, int row3, int col3){
+void drawTriangle(int row1, int col1, int row2, int col2, int row3, int col3)
+{
     drawLine(row1, col1, row2, col2);
     drawLine(row2, col2, row3, col3);
     drawLine(row3, col3, row1, col1);
 }
 
-void drawCircle(int centerRow, int centerCol, int radius){
+void drawCircle(int centerRow, int centerCol, int radius)
+{
     for (int row = 0; row < ROWS; row++)
     {
         for (int col = 0; col < COLS; col++)
@@ -248,13 +627,14 @@ void drawCircle(int centerRow, int centerCol, int radius){
 
             if (abs(distanceSquared - radiusSquared) <= radius)
             {
-                canvas[row][col] = '*';
+                setCanvasPixel(row, col);
             }
         }
     }
 }
 
-void displayCanvas(){
+void displayCanvas()
+{
     for (int i = 0; i < ROWS; i++)
     {
         for (int j = 0; j < COLS; j++)
@@ -265,7 +645,8 @@ void displayCanvas(){
     }
 }
 
-void renderCanvas(){
+void renderCanvas()
+{
     initCanvas();
 
     for (int i = 0; i < rectangleCount; i++)
@@ -289,7 +670,8 @@ void renderCanvas(){
     }
 }
 
-void deleteRectangle(int index){
+void deleteRectangle(int index)
+{
     if (index < 0 || index >= rectangleCount)
     {
         printf("Invalid Rectangle Index\n");
@@ -304,7 +686,8 @@ void deleteRectangle(int index){
     rectangleCount--;
 }
 
-void deleteLine(int index){
+void deleteLine(int index)
+{
     if (index < 0 || index >= lineCount)
     {
         printf("Invalid Line Index\n");
@@ -319,7 +702,8 @@ void deleteLine(int index){
     lineCount--;
 }
 
-void deleteCircle(int index){
+void deleteCircle(int index)
+{
     if (index < 0 || index >= circleCount)
     {
         printf("Invalid Circle Index\n");
@@ -334,7 +718,8 @@ void deleteCircle(int index){
     circleCount--;
 }
 
-void deleteTriangle(int index){
+void deleteTriangle(int index)
+{
     if (index < 0 || index >= triangleCount)
     {
         printf("Invalid Triangle Index\n");
@@ -351,7 +736,7 @@ void deleteTriangle(int index){
 
 void modifyRectangle(int index, int row, int col, int width, int height)
 {
-    if(index < 0 || index >= rectangleCount)
+    if (index < 0 || index >= rectangleCount)
     {
         printf("Invalid Rectangle Index\n");
         return;
@@ -365,7 +750,7 @@ void modifyRectangle(int index, int row, int col, int width, int height)
 
 void modifyLine(int index, int row1, int col1, int row2, int col2)
 {
-    if(index < 0 || index >= lineCount)
+    if (index < 0 || index >= lineCount)
     {
         printf("Invalid Line Index\n");
         return;
@@ -379,7 +764,7 @@ void modifyLine(int index, int row1, int col1, int row2, int col2)
 
 void modifyTriangle(int index, int row1, int col1, int row2, int col2, int row3, int col3)
 {
-    if(index < 0 || index >= triangleCount)
+    if (index < 0 || index >= triangleCount)
     {
         printf("Invalid Triangle Index\n");
         return;
@@ -397,7 +782,7 @@ void modifyTriangle(int index, int row1, int col1, int row2, int col2, int row3,
 
 void modifyCircle(int index, int centerRow, int centerCol, int radius)
 {
-    if(index < 0 || index >= circleCount)
+    if (index < 0 || index >= circleCount)
     {
         printf("Invalid Circle Index\n");
         return;
