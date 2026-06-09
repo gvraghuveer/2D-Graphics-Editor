@@ -3,13 +3,7 @@
 
 #define ROWS 20
 #define COLS 50
-#define CLEAR_BUFFER()                              \
-    do                                              \
-    {                                               \
-        int c;                                      \
-        while ((c = getchar()) != '\n' && c != EOF) \
-            ;                                       \
-    } while (0)
+#define CLEAR_BUFFER() while (getchar() != '\n')
 
 typedef struct
 {
@@ -475,6 +469,24 @@ void initCanvas()
 
 void addRectangle(int row, int col, int width, int height)
 {
+    if (width <= 0 || height <= 0)
+    {
+        printf("Error: Width and height must be positive\n");
+        return;
+    }
+
+    if (row < 0 || row >= ROWS || col < 0 || col >= COLS)
+    {
+        printf("Error: Starting position is outside canvas bounds\n");
+        return;
+    }
+
+    if (row + height > ROWS || col + width > COLS)
+    {
+        printf("Error: Rectangle extends beyond canvas bounds\n");
+        return;
+    }
+
     rectangles[rectangleCount].row = row;
     rectangles[rectangleCount].col = col;
     rectangles[rectangleCount].width = width;
@@ -485,6 +497,16 @@ void addRectangle(int row, int col, int width, int height)
 
 void addLine(int row1, int col1, int row2, int col2)
 {
+    // Validate that at least one point is within bounds
+    int validStart = (row1 >= 0 && row1 < ROWS && col1 >= 0 && col1 < COLS);
+    int validEnd = (row2 >= 0 && row2 < ROWS && col2 >= 0 && col2 < COLS);
+
+    if (!validStart && !validEnd)
+    {
+        printf("Error: Both endpoints are outside canvas bounds\n");
+        return;
+    }
+
     lines[lineCount].row1 = row1;
     lines[lineCount].col1 = col1;
     lines[lineCount].row2 = row2;
@@ -495,6 +517,17 @@ void addLine(int row1, int col1, int row2, int col2)
 
 void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3)
 {
+    // Validate that at least one point is within bounds
+    int valid1 = (row1 >= 0 && row1 < ROWS && col1 >= 0 && col1 < COLS);
+    int valid2 = (row2 >= 0 && row2 < ROWS && col2 >= 0 && col2 < COLS);
+    int valid3 = (row3 >= 0 && row3 < ROWS && col3 >= 0 && col3 < COLS);
+
+    if (!valid1 && !valid2 && !valid3)
+    {
+        printf("Error: All triangle points are outside canvas bounds\n");
+        return;
+    }
+
     triangles[triangleCount].row1 = row1;
     triangles[triangleCount].col1 = col1;
 
@@ -509,6 +542,19 @@ void addTriangle(int row1, int col1, int row2, int col2, int row3, int col3)
 
 void addCircle(int centerRow, int centerCol, int radius)
 {
+    if (radius <= 0)
+    {
+        printf("Error: Radius must be positive\n");
+        return;
+    }
+
+    if (centerRow < 0 || centerRow >= ROWS || centerCol < 0 || centerCol >= COLS)
+    {
+        printf("Error: Center point is outside canvas bounds\n");
+        return;
+    }
+
+    // Basic bounds check - circle might extend beyond, but we'll let drawCircle handle clipping
     circles[circleCount].centerRow = centerRow;
     circles[circleCount].centerCol = centerCol;
     circles[circleCount].radius = radius;
@@ -615,21 +661,32 @@ void drawTriangle(int row1, int col1, int row2, int col2, int row3, int col3)
 
 void drawCircle(int centerRow, int centerCol, int radius)
 {
-    for (int row = 0; row < ROWS; row++)
+    int x = 0;
+    int y = radius;
+    int d = 3 - 2 * radius;
+
+    while (y >= x)
     {
-        for (int col = 0; col < COLS; col++)
+        // Draw all 8 octants
+        setCanvasPixel(centerRow + y, centerCol + x);
+        setCanvasPixel(centerRow + y, centerCol - x);
+        setCanvasPixel(centerRow - y, centerCol + x);
+        setCanvasPixel(centerRow - y, centerCol - x);
+        setCanvasPixel(centerRow + x, centerCol + y);
+        setCanvasPixel(centerRow + x, centerCol - y);
+        setCanvasPixel(centerRow - x, centerCol + y);
+        setCanvasPixel(centerRow - x, centerCol - y);
+
+        if (d < 0)
         {
-            int dx = col - centerCol;
-            int dy = row - centerRow;
-
-            int distanceSquared = dx * dx + dy * dy;
-            int radiusSquared = radius * radius;
-
-            if (abs(distanceSquared - radiusSquared) <= radius)
-            {
-                setCanvasPixel(row, col);
-            }
+            d = d + 4 * x + 6;
         }
+        else
+        {
+            d = d + 4 * (x - y) + 10;
+            y--;
+        }
+        x++;
     }
 }
 
@@ -742,6 +799,24 @@ void modifyRectangle(int index, int row, int col, int width, int height)
         return;
     }
 
+    if (width <= 0 || height <= 0)
+    {
+        printf("Error: Width and height must be positive\n");
+        return;
+    }
+
+    if (row < 0 || row >= ROWS || col < 0 || col >= COLS)
+    {
+        printf("Error: Starting position is outside canvas bounds\n");
+        return;
+    }
+
+    if (row + height > ROWS || col + width > COLS)
+    {
+        printf("Error: Rectangle extends beyond canvas bounds\n");
+        return;
+    }
+
     rectangles[index].row = row;
     rectangles[index].col = col;
     rectangles[index].width = width;
@@ -753,6 +828,16 @@ void modifyLine(int index, int row1, int col1, int row2, int col2)
     if (index < 0 || index >= lineCount)
     {
         printf("Invalid Line Index\n");
+        return;
+    }
+
+    // Validate that at least one point is within bounds
+    int validStart = (row1 >= 0 && row1 < ROWS && col1 >= 0 && col1 < COLS);
+    int validEnd = (row2 >= 0 && row2 < ROWS && col2 >= 0 && col2 < COLS);
+
+    if (!validStart && !validEnd)
+    {
+        printf("Error: Both endpoints are outside canvas bounds\n");
         return;
     }
 
