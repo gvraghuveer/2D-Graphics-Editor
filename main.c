@@ -315,12 +315,7 @@ int main()
                 scanf("%d", &height);
                 CLEAR_BUFFER();
 
-                modifyRectangle(
-                    index,
-                    row,
-                    col,
-                    width,
-                    height);
+                modifyRectangle( index, row, col, width, height);
 
                 break;
             }
@@ -388,11 +383,7 @@ int main()
                 scanf("%d", &col3);
                 CLEAR_BUFFER();
 
-                modifyTriangle(
-                    index,
-                    row1, col1,
-                    row2, col2,
-                    row3, col3);
+                modifyTriangle(index, row1, col1, row2, col2, row3, col3);
 
                 break;
             }
@@ -420,11 +411,7 @@ int main()
                 scanf("%d", &radius);
                 CLEAR_BUFFER();
 
-                modifyCircle(
-                    index,
-                    centerRow,
-                    centerCol,
-                    radius);
+                modifyCircle(index, centerRow, centerCol, radius);
 
                 break;
             }
